@@ -13,8 +13,9 @@ import (
 )
 
 var (
-	AppSecret = os.Getenv("secret")
-	botToken  = os.Getenv("token")
+	appSecret = os.Getenv("SECRET")
+	botToken  = os.Getenv("TOKEN")
+	verify    = os.Getenv("VERIFY")
 )
 
 func main() {
@@ -24,6 +25,12 @@ func main() {
 
 func handler(w http.ResponseWriter, req *http.Request) {
 	if req.Method == "GET" {
+		query := req.URL.Query()
+		verifyToken := query.Get("hub.verify_token")
+		if verifyToken != verify {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
 		io.WriteString(w, req.URL.Query().Get("hub.challenge"))
 	} else if req.Method == "POST" {
 		read, err := ioutil.ReadAll(req.Body)
@@ -31,8 +38,8 @@ func handler(w http.ResponseWriter, req *http.Request) {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
-		if AppSecret != "" {
-			if req.Header.Get("x-hub-signature") == "" || !checkIntegrity(AppSecret, read, req.Header.Get("x-hub-signature")[5:]) {
+		if appSecret != "" {
+			if req.Header.Get("x-hub-signature") == "" || !checkIntegrity(appSecret, read, req.Header.Get("x-hub-signature")[5:]) {
 				w.WriteHeader(http.StatusBadRequest)
 				return
 			}
