@@ -1,14 +1,12 @@
 package main
 
 import (
-	"crypto/hmac"
-	"crypto/sha1"
+	"encoding/json"
 	"fmt"
-	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 
+	messenger "github.com/maciekmm/messenger-platform-go-sdk"
 	"github.com/spf13/viper"
 )
 
@@ -35,44 +33,28 @@ func main() {
 	tlsCertFile = viper.GetString("TLS_CERT")
 	tlsKeyFile = viper.GetString("TLS_KEY")
 
-	http.HandleFunc("/webhook", handler)
+	messenger := &messenger.Messenger{
+		VerifyToken: verify,
+		AppSecret:   appSecret,
+		AccessToken: botToken,
+	}
+	messenger.MessageReceived = onMessageReceived
+
+	http.HandleFunc("/webhook", messenger.Handler)
 	log.Fatal(http.ListenAndServeTLS(":443", tlsCertFile, tlsKeyFile, nil))
 }
 
-func handler(w http.ResponseWriter, req *http.Request) {
-	if req.Method == "GET" {
-		query := req.URL.Query()
-		verifyToken := query.Get("hub.verify_token")
-		if verifyToken != verify {
-			w.WriteHeader(http.StatusUnauthorized)
-			return
-		}
-		io.WriteString(w, req.URL.Query().Get("hub.challenge"))
-	} else if req.Method == "POST" {
-		read, err := ioutil.ReadAll(req.Body)
-		if err != nil {
-			w.WriteHeader(http.StatusBadRequest)
-			return
-		}
-		if appSecret != "" {
-			if req.Header.Get("x-hub-signature") == "" || !checkIntegrity(appSecret, read, req.Header.Get("x-hub-signature")[5:]) {
-				w.WriteHeader(http.StatusBadRequest)
-				return
-			}
-		}
-
-		fmt.Println(string(read[:]))
-	} else {
-		w.WriteHeader(http.StatusMethodNotAllowed)
+func onMessageReceived(e messenger.Event, opts messenger.MessageOpts, msg messenger.ReceivedMessage) {
+	out := Out{e, opts, msg}
+	b, err := json.Marshal(out)
+	if err != nil {
+		log.Fatal(err)
 	}
+	fmt.Println(string(b[:]))
 }
 
-// secret check
-func checkIntegrity(appSecret string, bytes []byte, expectedSignature string) bool {
-	mac := hmac.New(sha1.New, []byte(appSecret))
-	mac.Write(bytes)
-	if fmt.Sprintf("%x", mac.Sum(nil)) != expectedSignature {
-		return false
-	}
-	return true
+type Out struct {
+	E    messenger.Event           `json:"event"`
+	Opts messenger.MessageOpts     `json:"opts"`
+	Msg  messenger.ReceivedMessage `json:"message"`
 }
