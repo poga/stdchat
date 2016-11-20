@@ -5,7 +5,7 @@ facebook messenger to unix pipe
 ### Install
 
 ```
-go get -u github.com/poga/botlisten/...
+go get -u github.com/poga/stdbot/...
 ```
 
 ### Usage
