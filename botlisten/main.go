@@ -16,6 +16,7 @@ var (
 	verify      = ""
 	tlsCertFile = ""
 	tlsKeyFile  = ""
+	bot         *messenger.Messenger
 )
 
 func main() {
@@ -33,19 +34,23 @@ func main() {
 	tlsCertFile = viper.GetString("TLS_CERT")
 	tlsKeyFile = viper.GetString("TLS_KEY")
 
-	messenger := &messenger.Messenger{
+	bot = &messenger.Messenger{
 		VerifyToken: verify,
 		AppSecret:   appSecret,
 		AccessToken: botToken,
 	}
-	messenger.MessageReceived = onMessageReceived
+	bot.MessageReceived = onMessageReceived
 
-	http.HandleFunc("/webhook", messenger.Handler)
+	http.HandleFunc("/webhook", bot.Handler)
 	log.Fatal(http.ListenAndServeTLS(":443", tlsCertFile, tlsKeyFile, nil))
 }
 
 func onMessageReceived(e messenger.Event, opts messenger.MessageOpts, msg messenger.ReceivedMessage) {
-	out := Out{e, opts, msg}
+	profile, err := bot.GetProfile(opts.Sender.ID)
+	if err != nil {
+		log.Fatal(err)
+	}
+	out := Out{e, opts, msg, *profile}
 	b, err := json.Marshal(out)
 	if err != nil {
 		log.Fatal(err)
@@ -54,7 +59,8 @@ func onMessageReceived(e messenger.Event, opts messenger.MessageOpts, msg messen
 }
 
 type Out struct {
-	E    messenger.Event           `json:"event"`
-	Opts messenger.MessageOpts     `json:"opts"`
-	Msg  messenger.ReceivedMessage `json:"message"`
+	E       messenger.Event           `json:"event"`
+	Opts    messenger.MessageOpts     `json:"opts"`
+	Msg     messenger.ReceivedMessage `json:"message"`
+	Profile messenger.Profile         `json:"profile"`
 }
