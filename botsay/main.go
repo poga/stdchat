@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -35,11 +36,24 @@ func main() {
 	scanner := bufio.NewScanner(os.Stdin)
 
 	for scanner.Scan() {
-		fmt.Println(scanner.Text())
-		resp, err := sendSimpleMessage("1029299690525296", "hi")
+		data, err := parseInput(scanner.Text())
+		if err != nil {
+			log.Fatal(err)
+		}
+		resp, err := sendSimpleMessage(data["recipient"], data["message"])
 		if err != nil {
 			log.Fatal(err)
 		}
 		fmt.Println(resp)
 	}
+}
+
+func parseInput(input string) (map[string]string, error) {
+	var data map[string]string
+	err := json.Unmarshal([]byte(input), &data)
+	if err != nil {
+		return nil, err
+	}
+
+	return data, nil
 }
