@@ -1,4 +1,4 @@
-# botpipe
+# stdbot
 
 facebook messenger to unix pipe
 
