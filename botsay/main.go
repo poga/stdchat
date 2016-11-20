@@ -33,18 +33,24 @@ func main() {
 	verify = viper.GetString("VERIFY")
 	tlsCertFile = viper.GetString("TLS_CERT")
 	tlsKeyFile = viper.GetString("TLS_KEY")
-	scanner := bufio.NewScanner(os.Stdin)
 
+	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
-		data, err := parseInput(scanner.Text())
+		txt := scanner.Text()
+		fmt.Println(txt)
+		data, err := parseInput(txt)
 		if err != nil {
 			log.Fatal(err)
 		}
+		fmt.Printf("%v\n", data)
 		resp, err := sendSimpleMessage(data["recipient"], data["message"])
 		if err != nil {
 			log.Fatal(err)
 		}
 		fmt.Println(resp)
+	}
+	if err := scanner.Err(); err != nil {
+		log.Fatal(err)
 	}
 }
 
