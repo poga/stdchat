@@ -7,16 +7,12 @@ import (
 	"log"
 	"os"
 
+	messenger "github.com/maciekmm/messenger-platform-go-sdk"
 	"github.com/spf13/viper"
 )
 
 var (
-	appSecret   = ""
-	botToken    = ""
-	verify      = ""
-	tlsCertFile = ""
-	tlsKeyFile  = ""
-	GraphAPI    = "https://graph.facebook.com"
+	botToken = ""
 )
 
 func main() {
@@ -28,11 +24,11 @@ func main() {
 	}
 	viper.AutomaticEnv()
 
-	appSecret = viper.GetString("APP_SECRET")
 	botToken = viper.GetString("TOKEN")
-	verify = viper.GetString("VERIFY")
-	tlsCertFile = viper.GetString("TLS_CERT")
-	tlsKeyFile = viper.GetString("TLS_KEY")
+
+	messenger := &messenger.Messenger{
+		AccessToken: botToken,
+	}
 
 	reader := bufio.NewReader(os.Stdin)
 	for {
@@ -46,7 +42,7 @@ func main() {
 			log.Fatal("parse error", err)
 		}
 		fmt.Printf("%v\n", data)
-		resp, err := sendSimpleMessage(data["recipient"], data["message"])
+		resp, err := messenger.SendSimpleMessage(data["recipient"], data["message"])
 		if err != nil {
 			log.Fatal("send msg error", err)
 		}
