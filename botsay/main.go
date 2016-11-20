@@ -36,12 +36,10 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		log.Println("read", txt)
 		data, err := parseInput(txt)
 		if err != nil {
 			log.Fatal("parse error", err)
 		}
-		fmt.Printf("%v\n", data)
 		resp, err := messenger.SendSimpleMessage(data["recipient"], data["message"])
 		if err != nil {
 			log.Fatal("send msg error", err)
