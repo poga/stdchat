@@ -20,7 +20,7 @@ var (
 )
 
 func main() {
-	viper.SetConfigName("bot")
+	viper.SetConfigName("chat")
 	viper.AddConfigPath(".")
 	err := viper.ReadInConfig()
 	if err != nil {
