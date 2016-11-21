@@ -42,6 +42,7 @@ func main() {
 	bot.MessageReceived = onMessageReceived
 
 	http.HandleFunc("/webhook", bot.Handler)
+	http.HandleFunc("/privacy", privacy)
 	log.Fatal(http.ListenAndServeTLS(":443", tlsCertFile, tlsKeyFile, nil))
 }
 
@@ -63,4 +64,8 @@ type Out struct {
 	Opts    messenger.MessageOpts     `json:"opts"`
 	Msg     messenger.ReceivedMessage `json:"message"`
 	Profile messenger.Profile         `json:"profile"`
+}
+
+func privacy(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("WE WON'T SAVE OR SHARE ANYTHING YOU'VE UPLOADED."))
 }
