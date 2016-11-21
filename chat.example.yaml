@@ -1,0 +1,5 @@
+app_secret: "APP_SECRET"
+token: "BOT_TOKEN"
+verify: "VERIFY"
+tls_cert: "cert.pem"
+tls_key: "key.pem"
