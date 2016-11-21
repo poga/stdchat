@@ -67,5 +67,5 @@ type Out struct {
 }
 
 func privacy(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("WE WON'T SAVE OR SHARE ANYTHING YOU'VE UPLOADED."))
+	w.Write([]byte("ALL YOUR DATA ARE BELONG TO US"))
 }
