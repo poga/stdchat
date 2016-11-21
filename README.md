@@ -5,12 +5,12 @@ facebook messenger to unix pipe
 ### Install
 
 ```
-go get -u github.com/poga/stdbot/...
+go get -u github.com/poga/stdchat/...
 ```
 
 ### Usage
 
-First, prepare `bot.toml`. For example:
+First, prepare `chat.toml`. For example:
 
 ```toml
 app_secret = "YOUR_APP_SECRET"
@@ -23,7 +23,7 @@ tls_key = "key.pem" # webhook requires https. use letsEncrypt to generate your o
 Then:
 
 ```
-botlisten | your_program | botsay
+chatlisten | your_program | chatsay
 ```
 
 **note**: remember to turn off buffering of your_program's stdout(or remember to flush it).
