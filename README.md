@@ -28,6 +28,10 @@ chatin | your_program | chatout
 
 **note**: remember to turn off buffering of `your_program`'s stdout(or remember to flush it).
 
+### Privacy Policy
+
+Facebook messenger requires a privacy police for your app. `chatin` provides a basic template for you to customize: `/privacy`.
+
 ### License
 
 The MIT License
