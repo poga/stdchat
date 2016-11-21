@@ -10,14 +10,14 @@ go get -u github.com/poga/stdchat/...
 
 ### Usage
 
-First, prepare `chat.toml`. For example:
+First, prepare `chat.yaml`. For example:
 
-```toml
-app_secret = "YOUR_APP_SECRET"
-token = "YOUR_BOT_TOKEN"
-verify = "VERIFY_TOKEN_FOR_REGISTER_WEBHOOK"
-tls_cert = "cert.pem" # webhook requires https. use letsEncrypt to generate your own cert
-tls_key = "key.pem" # webhook requires https. use letsEncrypt to generate your own cert
+```yaml
+app_secret: "YOUR_APP_SECRET"
+token: "YOUR_BOT_TOKEN"
+verify: "VERIFY_TOKEN_FOR_REGISTER_WEBHOOK"
+tls_cert: "cert.pem" # webhook requires https. use letsEncrypt to generate your own cert
+tls_key: "key.pem" # webhook requires https. use letsEncrypt to generate your own cert
 ```
 
 Then:
