@@ -23,10 +23,10 @@ tls_key: "key.pem" # webhook requires https. use letsEncrypt to generate your ow
 Then:
 
 ```
-chatlisten | your_program | chatsay
+chatin | your_program | chatout
 ```
 
-**note**: remember to turn off buffering of your_program's stdout(or remember to flush it).
+**note**: remember to turn off buffering of `your_program`'s stdout(or remember to flush it).
 
 ### License
 
