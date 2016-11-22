@@ -43,7 +43,7 @@ func main() {
 
 	http.HandleFunc("/webhook", bot.Handler)
 	http.HandleFunc("/privacy", privacy)
-	http.HandleFunc("/", index)
+	http.HandleFunc("/whatisthis", index)
 	log.Fatal(http.ListenAndServeTLS(":443", tlsCertFile, tlsKeyFile, nil))
 }
 
