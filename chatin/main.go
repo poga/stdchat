@@ -43,6 +43,7 @@ func main() {
 
 	http.HandleFunc("/webhook", bot.Handler)
 	http.HandleFunc("/privacy", privacy)
+	http.HandleFunc("/", index)
 	log.Fatal(http.ListenAndServeTLS(":443", tlsCertFile, tlsKeyFile, nil))
 }
 
@@ -68,4 +69,8 @@ type Out struct {
 
 func privacy(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("ALL YOUR DATA ARE BELONG TO US"))
+}
+
+func index(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("JUST A BOT"))
 }
