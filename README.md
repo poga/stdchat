@@ -1,6 +1,6 @@
 # stdchat
 
-facebook messenger to unix pipe
+facebook messenger to THE UNIVERSAL INTERFACE
 
 ## Install
 
