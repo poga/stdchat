@@ -51,7 +51,27 @@ chatin | ruby bot.rb | chatout
 `chatin` will convert received messages into a JSON output to `stdout`. For example:
 
 ```js
-{"event":{"id":id,"time":time},"opts":{"sender":{"id":"id"},"recipient":{"id":"id"},"timestamp":ts},"message":{"mid":"mid","text":"hi","seq":53},"profile":{...}}
+{
+  "event":{
+    "id":id,
+    "time":time
+  },
+  "opts":{
+    "sender":{
+      "id":"id"
+    },
+    "recipient":{
+      "id":"id"
+    },
+    "timestamp":ts
+  },
+  "message":{
+    "mid":"mid",
+    "text":"hi",
+    "seq":53
+  },
+  "profile":{...}
+}
 ```
 
 You can consume these outputs with unix pipe.
