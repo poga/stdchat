@@ -75,9 +75,9 @@ type Out struct {
 }
 
 func privacy(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("ALL YOUR DATA ARE BELONG TO US"))
+	w.Write([]byte(appPrivacy))
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("JUST A BOT"))
+	w.Write([]byte(appDescription))
 }
