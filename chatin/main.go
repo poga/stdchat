@@ -11,12 +11,15 @@ import (
 )
 
 var (
-	appSecret   = ""
-	botToken    = ""
-	verify      = ""
-	tlsCertFile = ""
-	tlsKeyFile  = ""
+	appSecret   string
+	botToken    string
+	verify      string
+	tlsCertFile string
+	tlsKeyFile  string
 	bot         *messenger.Messenger
+
+	appDescription string
+	appPrivacy     string
 )
 
 func main() {
@@ -27,12 +30,16 @@ func main() {
 		fmt.Printf("Read config error: %s\n", err)
 	}
 	viper.AutomaticEnv()
+	viper.SetDefault("APP_DESC", "JUST A BOT")
+	viper.SetDefault("APP_PRIVACY", "ALL YOUR DATA ARE BELONG TO US")
 
 	appSecret = viper.GetString("APP_SECRET")
 	botToken = viper.GetString("TOKEN")
 	verify = viper.GetString("VERIFY")
 	tlsCertFile = viper.GetString("TLS_CERT")
 	tlsKeyFile = viper.GetString("TLS_KEY")
+	appDescription = viper.GetString("APP_DESC")
+	appPrivacy = viper.GetString("APP_PRIVACY")
 
 	bot = &messenger.Messenger{
 		VerifyToken: verify,
